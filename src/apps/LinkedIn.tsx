@@ -1,15 +1,14 @@
-import { education, experience, links, profile, skills } from '../data/content'
+import { education, experience, linkedinProfile as li, links, profile, skills } from '../data/content'
 
 const initials = (s: string) => s.slice(0, 2).toUpperCase()
 
 export function LinkedIn() {
-  const headline = `${profile.role} | JavaScript | React | Next | NestJS | Node | Flutter | Dart`
-  const current = experience[0]
+  const current = experience[li.currentCompanyIndex] ?? experience[0]
 
   return (
     <div className="li">
       <section className="li-card li-top">
-        <div className="li-banner" style={{ backgroundImage: 'url(/linkedin-capa.webp)' }} />
+        <div className="li-banner" style={{ backgroundImage: `url(${li.cover})` }} />
         <img className="li-avatar" src={profile.photo} alt={profile.name} />
 
         <div className="li-info">
@@ -26,14 +25,14 @@ export function LinkedIn() {
               {current.company}
             </span>
           </div>
-          <p className="li-headline">{headline}</p>
+          <p className="li-headline">{li.headline}</p>
           <p className="li-meta">
-            {profile.location.replace('RN', 'Rio Grande do Norte, Brasil')} ·{' '}
+            {li.locationFull} ·{' '}
             <a href={`mailto:${links.email}`}>Dados de contato</a>
           </p>
           <p className="li-meta">
             <a href={links.linkedin} target="_blank" rel="noreferrer">
-              Mais de 500 conexões
+              {li.connections}
             </a>
           </p>
 
@@ -49,12 +48,12 @@ export function LinkedIn() {
             </a>
           </div>
 
-          <div className="li-open">
-            <strong>Aberto a oportunidades · Full Stack, Backend e Frontend</strong>
-            <span>
-              {profile.location} · Remoto · Híbrido · Presencial
-            </span>
-          </div>
+          {li.openTo && (
+            <div className="li-open">
+              <strong>{li.openTo}</strong>
+              <span>{li.openToDetail}</span>
+            </div>
+          )}
         </div>
       </section>
 
@@ -72,7 +71,7 @@ export function LinkedIn() {
             <i className="li-logo">{initials(e.company)}</i>
             <div>
               <strong>{e.role}</strong>
-              <span>{e.company} · Freelance</span>
+              <span>{e.kind ? `${e.company} · ${e.kind}` : e.company}</span>
               <span className="li-dim">{e.period}</span>
               <p>{e.bullets[0]}</p>
             </div>

@@ -60,8 +60,8 @@ export function reducer(state: WMState, action: WMAction): WMState {
       const w = Math.min(meta.defaultW, action.vw - 24)
       const h = Math.min(meta.defaultH, action.vh - MENUBAR_H - DOCK_H)
       const cascade = (state.windows.length % 6) * 28
-      const x = Math.max(8, Math.round((action.vw - w) / 2) + cascade - 60)
-      const y = Math.max(MENUBAR_H + 8, Math.round((action.vh - h - DOCK_H) / 2) + cascade - 20)
+      const x = Math.max(8, Math.min(Math.round((action.vw - w) / 2) + cascade - 60, action.vw - w - 8))
+      const y = Math.max(MENUBAR_H + 8, Math.min(Math.round((action.vh - h - DOCK_H) / 2) + cascade - 20, action.vh - h - DOCK_H + 40))
       const win: WindowState = { id: action.app, x, y, w, h, z: state.nextZ, minimized: false, maximized: false }
       return { windows: [...state.windows, win], nextZ: state.nextZ + 1, activeId: action.app }
     }

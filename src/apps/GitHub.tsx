@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from 'react'
-import { githubRepos } from '../data/githubRepos'
+import { GITHUB_USER, useGithub, useReadme, type GithubData } from '../data/useGithub'
 import { githubProfile as gp, links, profile, projects, skillIcons } from '../data/content'
 
-const handle = links.github.split('/').filter(Boolean).pop() ?? 'usuario'
+const handle = GITHUB_USER
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9#]/g, '')
 const ICONS = Object.fromEntries(Object.entries(skillIcons).map(([k, v]) => [norm(k), v]))
 ICONS[norm('TailwindCSS')] = 'tailwind'
@@ -21,7 +21,7 @@ const fmtDate = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString(
 
 type Sort = 'updated' | 'name' | 'stars'
 
-function RepoList() {
+function RepoList({ repos: githubRepos }: { repos: GithubData['repos'] }) {
   const [q, setQ] = useState('')
   const [lang, setLang] = useState('')
   const [sort, setSort] = useState<Sort>('updated')
@@ -82,6 +82,8 @@ function RepoList() {
 }
 
 export function GitHub() {
+  const gh = useGithub()
+  const liveReadme = useReadme()
   const [tab, setTab] = useState<'overview' | 'repos'>('overview')
   const r = gp.readme
   const pinned = projects.filter((p) => p.repo)
@@ -105,7 +107,7 @@ export function GitHub() {
           Ver perfil no GitHub
         </a>
         <p className="gh-follow">
-          <b>{gp.followers}</b> seguidor · <b>{gp.following}</b> seguindo · <b>{gp.stars}</b> estrelas
+          <b>{gh.followers}</b> seguidor · <b>{gh.following}</b> seguindo · <b>{gh.stars}</b> estrelas
         </p>
         <ul className="gh-facts">
           <li>📍 {profile.location.replace(',', '')}</li>
@@ -127,11 +129,11 @@ export function GitHub() {
             Visão geral
           </button>
           <button className={tab === 'repos' ? 'is-on' : ''} onClick={() => setTab('repos')}>
-            Repositórios <span>{githubRepos.length}</span>
+            Repositórios <span>{gh.repos.length}</span>
           </button>
         </nav>
         {tab === 'repos' ? (
-          <RepoList />
+          <RepoList repos={gh.repos} />
         ) : (
           <>
         <article className="gh-readme">
@@ -139,7 +141,12 @@ export function GitHub() {
             <span>
               {handle} / <b>README</b>.md
             </span>
+            <span className={liveReadme ? 'gh-live is-on' : 'gh-live'}>{liveReadme ? '● README ao vivo do GitHub' : 'README salvo'}</span>
           </header>
+          {liveReadme ? (
+            // HTML sanitizado pelo GitHub e limpo em useReadme
+            <div className="gh-readme-body gh-md" dangerouslySetInnerHTML={{ __html: liveReadme }} />
+          ) : (
           <div className="gh-readme-body">
             <div className="gh-banner">
               <h2>{r.title}</h2>
@@ -154,9 +161,9 @@ export function GitHub() {
               ))}
             </div>
             <div className="gh-badges">
-              <span><i>Repositórios</i><b>{gp.repositories}</b></span>
-              <span><i>Seguidores</i><b>{gp.followers}</b></span>
-              <span><i>Stars</i><b>{gp.stars}</b></span>
+              <span><i>Repositórios</i><b>{gh.repositories}</b></span>
+              <span><i>Seguidores</i><b>{gh.followers}</b></span>
+              <span><i>Stars</i><b>{gh.stars}</b></span>
             </div>
 
             <h3>{r.aboutTitle}</h3>
@@ -209,6 +216,7 @@ export function GitHub() {
 
             <div className="gh-footer">{r.footer}</div>
           </div>
+          )}
         </article>
 
         <h2 className="gh-h2">Repositórios em destaque</h2>

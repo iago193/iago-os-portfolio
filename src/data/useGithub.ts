@@ -102,3 +102,74 @@ export function useGithub(): GithubData {
 
   return data
 }
+
+/* ───────── README do perfil (repositório <usuário>/<usuário>) ao vivo ───────── */
+
+const README_KEY = 'gh-readme-v1'
+
+function readReadmeCache(): string | null {
+  try {
+    const raw = sessionStorage.getItem(README_KEY)
+    if (!raw) return null
+    const { t, html } = JSON.parse(raw) as { t: number; html: string }
+    return Date.now() - t < CACHE_MS ? html : null
+  } catch {
+    return null
+  }
+}
+
+/** Remove tudo que possa executar código e abre links em nova aba. O HTML já vem sanitizado pelo GitHub; isto é uma segunda barreira. */
+function cleanHtml(html: string): string {
+  const doc = new DOMParser().parseFromString(html, 'text/html')
+  doc.querySelectorAll('script,style,iframe,object,embed,form,link,meta,base,.anchor').forEach((n) => n.remove())
+  doc.body.querySelectorAll('*').forEach((el) => {
+    for (const a of Array.from(el.attributes)) {
+      const v = a.value.trim().toLowerCase()
+      if (a.name.startsWith('on') || ((a.name === 'href' || a.name === 'src' || a.name === 'srcset') && /^(javascript|data):/.test(v) && !(a.name === 'src' && v.startsWith('data:image/')))) {
+        el.removeAttribute(a.name)
+      }
+    }
+    if (el.tagName === 'A') {
+      el.setAttribute('target', '_blank')
+      el.setAttribute('rel', 'noreferrer noopener')
+    }
+    if (el.tagName === 'IMG') el.setAttribute('loading', 'lazy')
+  })
+  return doc.body.innerHTML
+}
+
+async function loadReadme(): Promise<string> {
+  const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_USER}/readme`, {
+    headers: { Accept: 'application/vnd.github.html+json' },
+  })
+  if (!res.ok) throw new Error('README indisponível')
+  const html = cleanHtml(await res.text())
+  if (html.replace(/<[^>]*>/g, '').trim().length < 20 && !html.includes('<img')) throw new Error('README vazio')
+  return html
+}
+
+/** README do seu perfil no GitHub, já em HTML. `null` = ainda carregando ou falhou (o app mostra a versão salva). */
+export function useReadme(): string | null {
+  const [html, setHtml] = useState<string | null>(() => readReadmeCache())
+
+  useEffect(() => {
+    if (readReadmeCache()) return
+    let cancelled = false
+    loadReadme()
+      .then((h) => {
+        if (cancelled) return
+        setHtml(h)
+        try {
+          sessionStorage.setItem(README_KEY, JSON.stringify({ t: Date.now(), html: h }))
+        } catch {
+          /* sem cache, tudo bem */
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return html
+}

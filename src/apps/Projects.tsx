@@ -1,12 +1,12 @@
 import { useState, type KeyboardEvent, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { projects, type Project, type ProjectCategory } from '../data/content'
+import { CATEGORIES, projects, type Project, type ProjectCategory } from '../data/content'
 import { useWM } from '../os/context'
 import { MenuList, type MenuItem } from '../os/Menu'
 import { useSystem } from '../os/system'
 
 type Filter = 'Todos' | ProjectCategory
-const FILTERS: Filter[] = ['Todos', ...Array.from(new Set(projects.map((p) => p.category)))]
+const FILTERS: Filter[] = ['Todos', ...CATEGORIES.filter((c) => projects.some((p) => p.category === c))]
 
 interface Loc {
   filter: Filter
@@ -22,13 +22,16 @@ const ico = (d: ReactNode) => (
 const FILTER_ICON: Record<string, ReactNode> = {
   Todos: ico(<path d="M2.5 6.5a1.5 1.5 0 0 1 1.5-1.5h3.2l1.6 1.8H16a1.5 1.5 0 0 1 1.5 1.5v6.2A1.5 1.5 0 0 1 16 16H4a1.5 1.5 0 0 1-1.5-1.5Z" />),
   Web: ico(<><circle cx="10" cy="10" r="7" /><path d="M3 10h14M10 3c2.4 2.2 2.4 11.8 0 14M10 3c-2.4 2.2-2.4 11.8 0 14" /></>),
+  Mobile: ico(<><rect x="6" y="2.5" width="8" height="15" rx="2" /><path d="M9 14.8h2" /></>),
+  Design: ico(<path d="M3 17l1-4 9-9 3 3-9 9ZM11.5 5.5l3 3" />),
   IA: ico(<path d="M10 3v3M10 14v3M3 10h3M14 10h3M5.2 5.2l2 2M12.8 12.8l2 2M14.8 5.2l-2 2M7.2 12.8l-2 2" />),
 }
 
 function Thumb({ p }: { p: Project }) {
+  const [broken, setBroken] = useState(false)
   return (
     <span className="fx-thumb" style={{ background: `linear-gradient(135deg, ${p.colors[0]}, ${p.colors[1]})` }} aria-hidden="true">
-      {p.cover ? <img src={p.cover} alt="" loading="lazy" draggable={false} /> : p.glyph}
+      {p.cover && !broken ? <img src={p.cover} alt="" loading="lazy" draggable={false} onError={() => setBroken(true)} /> : p.glyph}
     </span>
   )
 }
