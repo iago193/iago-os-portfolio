@@ -1,78 +1,43 @@
-# React + TypeScript + Vite
+# iago-os-portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfólio em formato de desktop (menu bar, dock e janelas arrastáveis). React + TypeScript + Vite, sem dependências extras.
 
-Currently, two official plugins are available:
+## Rodar
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install   # só na primeira vez
+npm run dev   # http://localhost:5173
+npm run build # gera a pasta dist/ para publicar
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## O que tem na tela
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Tela de bloqueio, menu bar com menus funcionais, dock, clique direito no desktop, busca (Ctrl/⌘ + K), Central de Controle (claro/escuro e brilho), notificações, Ajustes (plano de fundo), Terminal com comandos para devs (`help`, `stack`, `tree`, `git log`, `cat package.json`, `curl /api/projects`…) e apps de WhatsApp, LinkedIn e GitHub.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Onde editar
+
+- `src/data/content.ts` — **todo o conteúdo** (nome, bio, habilidades, projetos, experiência, links). Hoje está com texto de exemplo.
+- `public/curriculo.pdf` — coloque seu PDF aqui (botão "Baixar PDF" do app Currículo).
+- `links` em `content.ts` — troque email, GitHub, LinkedIn, WhatsApp (formato `https://wa.me/55DDDNUMERO`) e `repo` pelos seus.
+- `public/icons/` — ícones de WhatsApp, LinkedIn e GitHub: ficam `whatsapp.png`, `linkedin.png` e `github.png` (256×256, fundo transparente). Para trocar, substitua os arquivos mantendo os nomes.
+- `public/foto.jpg` — sua foto; depois ajuste `photo: '/foto.jpg'` em `content.ts`.
+
+## Estrutura
 
 ```
+src/
+  os/        menu bar, dock, ícones, gerenciador de janelas
+  apps/      Projects, About, Resume, Contact, WhatsApp, LinkedIn, GitHub, Terminal, Settings
+  data/      content.ts
+  styles/    os.css (shell) e apps.css (janelas)
+```
+
+## Criar um app novo
+
+1. Adicione o id e os tamanhos em `src/os/appMeta.ts`.
+2. Crie o componente em `src/apps/`.
+3. Registre-o em `src/os/registry.tsx` e adicione um ícone em `src/os/Icons.tsx`.
+
+## Publicar
+
+Qualquer hospedagem estática funciona (Vercel, Netlify, GitHub Pages): build `npm run build`, pasta de saída `dist`.

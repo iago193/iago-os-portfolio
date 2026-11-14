@@ -1,0 +1,11 @@
+ÍCONES DOS APPS DE REDES (WhatsApp, LinkedIn, GitHub)
+
+Arquivos usados pelo portfólio (256x256, PNG, fundo transparente):
+
+  whatsapp.png
+  linkedin.png
+  github.png
+
+Para trocar por outra versão, substitua o arquivo mantendo o MESMO NOME.
+Prefira PNG quadrado com fundo transparente e pelo menos 256x256.
+Se um arquivo sumir, o app volta a mostrar o ícone genérico.
