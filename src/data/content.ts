@@ -1,6 +1,5 @@
 /**
- * ============================================================
- *  CONTEÚDO DO PORTFÓLIO — edite apenas este arquivo.
+ * Conteúdo do portfólio. Edite apenas este arquivo.
  *
  *  Onde mudar cada coisa:
  *   • profile ............ nome, cargo, cidade, foto (public/foto.webp), bio, PDF do currículo
@@ -11,7 +10,6 @@
  *   • linkedinProfile .... textos extras do app LinkedIn (headline, conexões, capa...)
  *   • whatsappChat ....... mensagens e respostas rápidas do app WhatsApp
  *   • techStack .......... comando `stack` do Terminal
- * ============================================================
  */
 
 export const profile = {
@@ -40,7 +38,7 @@ export const skills: { group: string; items: string[] }[] = [
   { group: 'DevOps e ferramentas', items: ['Git', 'GitHub', 'Docker', 'n8n', 'Figma', 'Deploy'] },
 ]
 
-/** App GitHub: perfil + README do perfil (use **negrito** nos textos). Edite à vontade. */
+/** App GitHub: perfil e README do perfil (use **negrito** nos textos). */
 export const githubProfile = {
   displayName: 'iago bruno',
   bio: 'Desenvolvedor Full Stack | JavaScript | React | Next | NestJS | Node | Flutter | Dart',
@@ -63,7 +61,7 @@ export const githubProfile = {
       ['Mobile', 'Aplicativos multiplataforma com **Flutter**.'],
       ['UI', 'Estilização com **Tailwind CSS**.'],
       ['Bancos', 'PostgreSQL, MySQL e MongoDB.'],
-      ['Local', 'Brasil — **remoto**, **híbrido** ou **presencial**.'],
+      ['Local', 'Brasil: **remoto**, **híbrido** ou **presencial**.'],
     ] as [string, string][],
     code: `const iagoBruno = {
   cargo: "Desenvolvedor Full Stack",
@@ -234,7 +232,7 @@ const buildProject = (p: ProjectInput): Project => ({
   gallery: Array.from({ length: p.shots ?? 0 }, (_, i) => `/projects/${p.id}/${i + 1}.webp`),
 })
 
-/* ↓↓↓ ADICIONE NOVOS PROJETOS AQUI (o mais novo primeiro) ↓↓↓ */
+/* Novos projetos entram aqui (o mais novo primeiro) */
 const projectList: ProjectInput[] = [
   {
     id: 'iago-os',
@@ -399,6 +397,6 @@ export const experience: Experience[] = [
 ]
 
 export const education = [
-  { school: '', course: 'JavaScript e TypeScript Avançado — Full Stack', period: 'Jun 2025 — Nov 2025' },
-  { school: '', course: 'Desenvolvimento Web Completo', period: 'Out 2024 — Jun 2025' },
+  { school: '', course: 'JavaScript e TypeScript Avançado - Full Stack', period: 'Jun 2025 - Nov 2025' },
+  { school: '', course: 'Desenvolvimento Web Completo', period: 'Out 2024 - Jun 2025' },
 ]

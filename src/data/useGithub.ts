@@ -103,7 +103,7 @@ export function useGithub(): GithubData {
   return data
 }
 
-/* ───────── README do perfil (repositório <usuário>/<usuário>) ao vivo ───────── */
+/* README do perfil (repositório <usuário>/<usuário>), lido ao vivo */
 
 const README_KEY = 'gh-readme-v1'
 
@@ -172,4 +172,66 @@ export function useReadme(): string | null {
   }, [])
 
   return html
+}
+
+/* Gráfico de contribuições. O GitHub não tem API oficial para isso, então usa o serviço público github-contributions-api. */
+
+export interface ContribDay {
+  date: string
+  count: number
+  level: 0 | 1 | 2 | 3 | 4
+}
+export interface Contribs {
+  total: number
+  days: ContribDay[]
+}
+
+const CONTRIB_KEY = 'gh-contrib-v1'
+const CONTRIB_MS = 60 * 60 * 1000
+
+function readContribCache(): Contribs | null {
+  try {
+    const raw = sessionStorage.getItem(CONTRIB_KEY)
+    if (!raw) return null
+    const { t, data } = JSON.parse(raw) as { t: number; data: Contribs }
+    return Date.now() - t < CONTRIB_MS ? data : null
+  } catch {
+    return null
+  }
+}
+
+async function loadContribs(): Promise<Contribs> {
+  const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}?y=last`)
+  if (!res.ok) throw new Error('Contribuições indisponíveis')
+  const j = (await res.json()) as { total?: Record<string, number>; contributions?: ContribDay[] }
+  const days = (j.contributions ?? []).filter((d) => typeof d.date === 'string' && typeof d.count === 'number')
+  if (days.length < 7) throw new Error('Contribuições vazias')
+  const total = j.total?.lastYear ?? days.reduce((n, d) => n + d.count, 0)
+  return { total, days: days.map((d) => ({ date: d.date, count: d.count, level: (Math.min(4, Math.max(0, d.level | 0)) as ContribDay['level']) })) }
+}
+
+/** Contribuições do último ano. `null` = carregando ou indisponível. */
+export function useContributions(): Contribs | null {
+  const [data, setData] = useState<Contribs | null>(() => readContribCache())
+
+  useEffect(() => {
+    if (readContribCache()) return
+    let cancelled = false
+    loadContribs()
+      .then((d) => {
+        if (cancelled) return
+        setData(d)
+        try {
+          sessionStorage.setItem(CONTRIB_KEY, JSON.stringify({ t: Date.now(), data: d }))
+        } catch {
+          /* sem cache, tudo bem */
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return data
 }

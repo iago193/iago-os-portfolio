@@ -44,10 +44,10 @@ Dicas: Tab completa o comando, ↑ ↓ navegam no histórico, Ctrl+L limpa a tel
 
 const TREE = `iago-os-portfolio/
 ├── public/
-│   ├── curriculo.pdf
+│   ├── Curriculo_Iago_Bruno.pdf
 │   └── favicon.svg
 ├── src/
-│   ├── apps/      # Projects, About, Resume, Contact, Terminal, Settings
+│   ├── apps/      # Projects, About, Resume, Contact, WhatsApp, LinkedIn, GitHub, Terminal, Settings
 │   ├── data/      # content.ts: todo o conteúdo do site
 │   ├── os/        # window manager, dock, menu bar, Spotlight
 │   ├── styles/    # os.css e apps.css
@@ -87,7 +87,7 @@ export function Terminal() {
   const [lines, setLines] = useState<Line[]>([
     {
       kind: 'out',
-      text: 'iago OS 1.0 — Terminal (demonstração, somente leitura)\nDigite help para ver os comandos. Tente: stack · tree · git log · cat package.json',
+      text: 'iago OS 1.0 - Terminal (demonstração, somente leitura)\nDigite help para ver os comandos. Tente: stack · tree · git log · cat package.json',
     },
   ])
   const [input, setInput] = useState('')

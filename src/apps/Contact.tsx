@@ -5,7 +5,7 @@ export function Contact() {
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
 
-  // Abre o app de e-mail do visitante já preenchido (sem precisar de backend).
+  // Abre o app de e-mail do visitante já preenchido (sem backend).
   const send = (e: FormEvent) => {
     e.preventDefault()
     const href = `mailto:${links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`

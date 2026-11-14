@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react'
-import { GITHUB_USER, useGithub, useReadme, type GithubData } from '../data/useGithub'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { GITHUB_USER, useGithub, useContributions, useReadme, type GithubData } from '../data/useGithub'
 import { githubProfile as gp, links, profile, projects, skillIcons } from '../data/content'
 
 const handle = GITHUB_USER
@@ -78,6 +78,68 @@ function RepoList({ repos: githubRepos }: { repos: GithubData['repos'] }) {
         ))}
       </ul>
     </div>
+  )
+}
+
+const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+
+function ContribGraph() {
+  const data = useContributions()
+  const scroller = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (scroller.current) scroller.current.scrollLeft = scroller.current.scrollWidth
+  }, [data])
+
+  if (!data) return null
+  // semanas começam no domingo; completa a primeira semana com células vazias
+  const first = new Date(`${data.days[0].date}T12:00:00`).getDay()
+  const cells: (typeof data.days[number] | null)[] = [...Array(first).fill(null), ...data.days]
+  const weeks = Math.ceil(cells.length / 7)
+  const labels: { col: number; text: string }[] = []
+  let lastMonth = -1
+  for (let w = 0; w < weeks; w++) {
+    const d = cells.slice(w * 7, w * 7 + 7).find(Boolean)
+    if (!d) continue
+    const m = new Date(`${d.date}T12:00:00`).getMonth()
+    if (m !== lastMonth) {
+      if (lastMonth !== -1 || w === 0) labels.push({ col: w, text: MONTHS[m] })
+      lastMonth = m
+    }
+  }
+
+  return (
+    <section className="gh-contrib">
+      <h2 className="gh-h2">
+        {data.total.toLocaleString('pt-BR')} contribuições no último ano <span className="gh-live is-on">● ao vivo</span>
+      </h2>
+      <div className="gh-contrib-box" ref={scroller}>
+        <div className="gh-contrib-inner" style={{ ['--weeks' as string]: weeks }}>
+          <div className="gh-contrib-months">
+            {labels.map((l) => (
+              <span key={l.col} style={{ gridColumn: l.col + 1 }}>{l.text}</span>
+            ))}
+          </div>
+          <div className="gh-contrib-grid">
+            {cells.map((c, i) =>
+              c ? (
+                <i key={c.date} className={`lv${c.level}`} title={`${c.count} contribuiç${c.count === 1 ? 'ão' : 'ões'} em ${fmtDate(c.date)}`} />
+              ) : (
+                <i key={`e${i}`} className="lv-empty" />
+              ),
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="gh-contrib-legend">
+        <a href={`${links.github}`} target="_blank" rel="noreferrer">Ver no GitHub</a>
+        <span>Menos</span>
+        {[0, 1, 2, 3, 4].map((l) => (
+          <i key={l} className={`lv${l}`} />
+        ))}
+        <span>Mais</span>
+      </div>
+    </section>
   )
 }
 
@@ -233,6 +295,7 @@ export function GitHub() {
             </a>
           ))}
         </div>
+        <ContribGraph />
         <a className="gh-code-link" href={links.repo} target="_blank" rel="noreferrer">
           Código-fonte deste portfólio
         </a>

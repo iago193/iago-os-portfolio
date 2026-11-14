@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { APP_META, APP_ORDER } from './appMeta'
 import { ControlCenter } from './ControlCenter'
 import { useWM } from './context'
@@ -99,7 +100,7 @@ export function MenuBar() {
 
   return (
     <header className="menubar">
-      {open && <div className="mb-overlay" onClick={() => setOpen(null)} />}
+      {open && createPortal(<div className="mb-overlay" onPointerDown={() => setOpen(null)} onContextMenu={(e) => { e.preventDefault(); setOpen(null) }} />, document.body)}
 
       <div className="mb-left">
         {top('apple', <LogoMark />, 'mb-btn mb-logo')}

@@ -23,7 +23,7 @@ export const APP_META: Record<AppId, AppMeta> = {
   whatsapp: { id: 'whatsapp', title: 'WhatsApp', label: 'WhatsApp', defaultW: 420, defaultH: 560, minW: 340, minH: 420, onDesktop: true },
   linkedin: { id: 'linkedin', title: 'LinkedIn', label: 'LinkedIn', defaultW: 660, defaultH: 560, minW: 440, minH: 380, onDesktop: true },
   github: { id: 'github', title: 'GitHub', label: 'GitHub', defaultW: 940, defaultH: 600, minW: 560, minH: 400, onDesktop: true },
-  terminal: { id: 'terminal', title: 'visitante — zsh — 90×26', label: 'Terminal', defaultW: 700, defaultH: 440, minW: 420, minH: 260, onDesktop: true },
+  terminal: { id: 'terminal', title: 'visitante - zsh - 90×26', label: 'Terminal', defaultW: 700, defaultH: 440, minW: 420, minH: 260, onDesktop: true },
   settings: { id: 'settings', title: 'Ajustes do Sistema', label: 'Ajustes', defaultW: 720, defaultH: 470, minW: 520, minH: 340, onDesktop: false, unified: true },
 }
 

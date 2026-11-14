@@ -41,7 +41,7 @@ export function Resume() {
           {education.map((e) => (
             <div key={e.course} className="job-head">
               <span>
-                <strong>{e.course}</strong>{e.school && ` — ${e.school}`}
+                <strong>{e.course}</strong>{e.school && ` - ${e.school}`}
               </span>
               <span className="muted">{e.period}</span>
             </div>

@@ -3,7 +3,7 @@ import type { AppId } from './appMeta'
 
 /**
  * Ícones de app no estilo "squircle": formato arredondado contínuo, degradê com brilho no topo,
- * borda com luz/sombra e ilustração com camadas. Desenhos originais (não são cópias de ícones de ninguém).
+ * borda com luz/sombra e ilustração com camadas.
  */
 const SQUIRCLE =
   'M18.5 2H45.5C56.3 2 62 7.7 62 18.5V45.5C62 56.3 56.3 62 45.5 62H18.5C7.7 62 2 56.3 2 45.5V18.5C2 7.7 7.7 2 18.5 2Z'
@@ -177,7 +177,7 @@ function GenericIcon({ id, size }: { id: AppId; size: number }) {
 
 /**
  * Ícones de marca: se existir o arquivo em public/icons/<app>.png, ele é usado.
- * Os arquivos são PNG 256×256 com fundo transparente (veja public/icons/LEIA-ME.txt).
+ * Os arquivos são PNG 256×256 com fundo transparente.
  * Sem o arquivo, cai no ícone genérico acima.
  */
 const BRAND_FILES: Partial<Record<AppId, string>> = {

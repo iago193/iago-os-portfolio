@@ -777,3 +777,55 @@
 .gh-md hr { height: 1px; margin: 20px 0; border: 0; background: #3d444d; }
 .gh-md details { margin-bottom: 12px; }
 .gh-md summary { cursor: pointer; }
+
+/* Projetos › Repositórios públicos do GitHub */
+.fx-repos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.fx-repos a { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 12px 14px; border: 1px solid var(--win-line); border-radius: 10px; background: var(--btn-bg); color: inherit; text-decoration: none; }
+.fx-repos a:hover { border-color: var(--accent); }
+.fx-repos strong { font-size: 14px; color: var(--accent); overflow-wrap: anywhere; }
+.fx-repo-desc { font-size: 12.5px; line-height: 1.4; color: var(--text-dim); }
+.fx-repo-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: auto; padding-top: 4px; font-size: 11.5px; color: var(--text-dim); }
+.fx-repo-meta span { display: inline-flex; align-items: center; gap: 5px; }
+.fx-repo-meta i { width: 10px; height: 10px; border-radius: 50%; }
+.fx-repos a { overflow: hidden; }
+.fx-repo-cover { display: grid; place-items: center; height: 72px; margin: -12px -14px 4px; color: rgba(255, 255, 255, 0.85); background: radial-gradient(120% 140% at 85% 0%, color-mix(in srgb, var(--lang, #6e7681) 55%, transparent), transparent 60%), linear-gradient(135deg, #0d1117, #1b2330); border-bottom: 1px solid var(--win-line); }
+
+/* Projetos como pastas */
+.fx-folder { position: relative; display: block; width: 104px; aspect-ratio: 1.28; flex: none; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35)); }
+.fx-folder-back { position: absolute; inset: 6% 0 0; border-radius: 7px; background: #2f6fc4; }
+.fx-folder-back::before { content: ''; position: absolute; left: 0; top: -9%; width: 42%; height: 16%; border-radius: 6px 6px 0 0; background: #2f6fc4; }
+.fx-folder-paper { position: absolute; left: 9%; right: 9%; top: 14%; bottom: 26%; display: grid; place-items: center; overflow: hidden; border-radius: 3px; border: 1.5px solid #fff; font-size: 14px; font-weight: 800; color: rgba(255, 255, 255, 0.9); box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.3); }
+.fx-folder-paper img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.fx-folder-front { position: absolute; left: 0; right: 0; bottom: 0; top: 38%; border-radius: 6px 6px 7px 7px; background: linear-gradient(180deg, #6cb4f5, #3d8de0); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45); }
+.fx-cell-name .fx-folder { width: 30px; filter: none; }
+.fx-cell-name .fx-folder-paper { font-size: 6px; border-width: 1px; }
+.fx-row.is-sel .fx-folder-back, .fx-row.is-sel .fx-folder-back::before { background: #1f5aa8; }
+
+/* Dentro da pasta: imagens como arquivos */
+.fx-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px 8px; margin-bottom: 18px; }
+.fx-file { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px 6px; border: 0; border-radius: 8px; background: transparent; color: inherit; cursor: zoom-in; }
+.fx-file:hover, .fx-file:focus-visible { background: rgba(255, 255, 255, 0.1); outline: 0; }
+:root[data-theme='light'] .fx-file:hover { background: rgba(0, 0, 0, 0.06); }
+.fx-file-img { display: block; width: 104px; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 4px; border: 2px solid #fff; background: #222; box-shadow: 0 2px 7px rgba(0, 0, 0, 0.4); }
+.fx-file-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.fx-file-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.proj-info { padding-top: 14px; border-top: 1px solid var(--win-line); }
+.proj-info h3 { margin: 0 0 2px; font-size: 17px; }
+.fx-repo-paper { background: radial-gradient(120% 140% at 85% 0%, color-mix(in srgb, var(--lang, #6e7681) 60%, transparent), transparent 65%), linear-gradient(135deg, #0d1117, #1b2330); }
+
+/* Gráfico de contribuições */
+.gh-contrib { margin-top: 22px; }
+.gh-contrib .gh-h2 { margin: 0 0 10px; }
+.gh-contrib .gh-live { margin-left: 8px; font-size: 11px; font-weight: 400; }
+.gh-contrib-box { overflow-x: auto; padding: 12px 14px 8px; border: 1px solid #3d444d; border-radius: 6px; scrollbar-width: thin; }
+.gh-contrib-inner { width: max-content; --cell: 11px; --gap: 3px; }
+.gh-contrib-months, .gh-contrib-grid { display: grid; grid-template-columns: repeat(var(--weeks), var(--cell)); column-gap: var(--gap); }
+.gh-contrib-months { margin-bottom: 6px; height: 14px; font-size: 11px; color: #8d96a0; }
+.gh-contrib-months span { white-space: nowrap; overflow: visible; }
+.gh-contrib-grid { grid-template-rows: repeat(7, var(--cell)); grid-auto-flow: column; row-gap: var(--gap); }
+.gh-contrib-grid i, .gh-contrib-legend i { display: block; width: var(--cell, 11px); height: var(--cell, 11px); border-radius: 2px; outline: 1px solid rgba(255, 255, 255, 0.05); outline-offset: -1px; }
+.lv0 { background: #151b23; } .lv1 { background: #0e4429; } .lv2 { background: #006d32; } .lv3 { background: #26a641; } .lv4 { background: #39d353; }
+.lv-empty { background: transparent; outline: 0 !important; }
+.gh-contrib-legend { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 8px; font-size: 11px; color: #8d96a0; }
+.gh-contrib-legend a { margin-right: auto; }
+.gh-contrib-legend span { margin: 0 2px; }

@@ -70,7 +70,7 @@
 .mb-overlay {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 8999; /* acima de janelas e dock, abaixo da barra de menu (9000) */
 }
 
 .mb-menuwrap {
@@ -185,7 +185,7 @@
 .dock-wrap {
   position: fixed;
   inset: auto 0 8px 0;
-  z-index: 9500;
+  z-index: 8900;
   display: flex;
   justify-content: center;
   pointer-events: none;
